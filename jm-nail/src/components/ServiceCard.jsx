@@ -1,29 +1,37 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import React from 'react';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAZTqe0LbWUoqFDHPQ7JK9BckI5tJEJr9A",
-  authDomain: "jm-nail-booking.firebaseapp.com",
-  projectId: "jm-nail-booking",
-  storageBucket: "jm-nail-booking.firebasestorage.app",
-  messagingSenderId: "704128488448",
-  appId: "1:704128488448:web:1759bde47b2fae188d74e5",
-  measurementId: "G-GW0J0BQCWY"
-};
-
-// --- Initialize Firebase (Safe Mode) ---
-let auth, db;
-let initError = null;
-
-try {
-  const app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-} catch (error) {
-  console.error("Firebase Init Error:", error);
-  initError = error.message;
+export default function ServiceCard({ item, isSelected, onClick }) {
+  const Icon = item.icon;
+  return (
+    <div 
+      onClick={onClick}
+      className={`p-5 rounded-xl border transition-all cursor-pointer relative overflow-hidden group ${
+        isSelected 
+          ? 'border-rose-400 bg-rose-50 shadow-md' 
+          : 'border-stone-200 bg-white hover:border-rose-200'
+      }`}
+    >
+      {item.id === 'support' && (
+        <div className="absolute top-0 right-0 bg-rose-500 text-white text-[10px] px-2 py-1 rounded-bl-lg font-bold">
+          主打推薦
+        </div>
+      )}
+      <div className="flex items-start gap-4">
+        <div className={`p-3 rounded-full shrink-0 ${isSelected ? 'bg-rose-200 text-rose-700' : 'bg-stone-100 text-stone-500 group-hover:bg-rose-50 group-hover:text-rose-400'}`}>
+          <Icon size={24} />
+        </div>
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <h3 className="font-bold text-stone-800 text-lg">{item.title}</h3>
+            <div className="text-right">
+              <span className="block font-bold text-rose-600 text-lg">
+                ${item.price}{item.isStartPrice && <span className="text-xs text-rose-400">+</span>}
+              </span>
+            </div>
+          </div>
+          <p className="text-xs text-stone-500 mt-1 leading-relaxed">{item.desc}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
-
-export { auth, db, initError };
-export const APP_ID = "jm-nail-prod";
